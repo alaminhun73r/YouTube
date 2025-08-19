@@ -1,44 +1,81 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard - EasyEarnings</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Senior Dating</title>
 <link rel="stylesheet" href="style.css">
-<script type="module" src="app.js"></script>
+<script src="script.js" defer></script>
 </head>
-<body onload="initDashboard()">
+<body>
+
+<header>
+    <h1>Senior Dating</h1>
+    <p>Connect with like-minded adults</p>
+</header>
 
 <div class="container">
-    <h1 id="welcome">Hello, User</h1>
-    <p id="balance">Balance: $0</p>
-    <button onclick="logoutUser()">Logout</button>
 
-    <!-- Referral Section -->
-    <div class="referral">
-        <h2>Referral System</h2>
-        <input type="text" id="refLink" readonly>
-        <button onclick="copyReferral()">Copy Link</button>
-        <p id="refCount">Referrals: 0</p>
+    <!-- Slider Section -->
+    <div class="slider">
+        <div class="slides fade">
+            <div class="slide">
+                <img src="https://images.pexels.com/photos/1005642/pexels-photo-1005642.jpeg" alt="Senior Couple 1">
+            </div>
+            <div class="slide">
+                <img src="https://images.pexels.com/photos/5212350/pexels-photo-5212350.jpeg" alt="Senior Couple 2">
+            </div>
+            <div class="slide">
+                <img src="https://images.pexels.com/photos/4252960/pexels-photo-4252960.jpeg" alt="Senior Couple 3">
+            </div>
+            <div class="slide">
+                <img src="https://images.pexels.com/photos/7030170/pexels-photo-7030170.jpeg" alt="Senior Couple 4">
+            </div>
+        </div>
+        <div class="prev" onclick="prevSlide()">&#10094;</div>
+        <div class="next" onclick="nextSlide()">&#10095;</div>
     </div>
 
-    <!-- Task Cards -->
-    <h2>Tasks</h2>
-    <div class="cards">
-        <div class="card">🎥 Watch YouTube Videos</div>
-        <div class="card">📝 Micro Jobs</div>
-        <div class="card">⭐ Review & Earn</div>
-        <div class="card">📺 Watch Ads & Earn</div>
+    <!-- Interest Form -->
+    <h2>Find Your Match</h2>
+    <form onsubmit="filterMatches(); return false;">
+        <input type="text" id="interest" placeholder="Enter your interest (e.g., Music, Travel)">
+        <button type="submit">Search Matches</button>
+    </form>
+
+    <!-- Matches Section -->
+    <div class="matches">
+        <div class="match-card" data-interests="Music, Travel, Cooking">
+            <img src="https://images.pexels.com/photos/1005642/pexels-photo-1005642.jpeg" alt="John, 65">
+            <div class="info">
+                <h3>John, 65</h3>
+                <p>Interests: Music, Travel, Cooking</p>
+            </div>
+        </div>
+        <div class="match-card" data-interests="Gardening, Reading, Walking">
+            <img src="https://images.pexels.com/photos/5212350/pexels-photo-5212350.jpeg" alt="Mary, 62">
+            <div class="info">
+                <h3>Mary, 62</h3>
+                <p>Interests: Gardening, Reading, Walking</p>
+            </div>
+        </div>
+        <div class="match-card" data-interests="Travel, Cooking, Yoga">
+            <img src="https://images.pexels.com/photos/4252960/pexels-photo-4252960.jpeg" alt="David, 70">
+            <div class="info">
+                <h3>David, 70</h3>
+                <p>Interests: Travel, Cooking, Yoga</p>
+            </div>
+        </div>
+        <div class="match-card" data-interests="Music, Reading, Painting">
+            <img src="https://images.pexels.com/photos/7030170/pexels-photo-7030170.jpeg" alt="Linda, 67">
+            <div class="info">
+                <h3>Linda, 67</h3>
+                <p>Interests: Music, Reading, Painting</p>
+            </div>
+        </div>
     </div>
+
 </div>
 
-<!-- Popup -->
-<div id="popup">
-    <div class="popup-content">
-        <p>সফলভাবে কাজ শনাক্ত করতে দয়া করে সকল পারমিশন Allow করুন। এর মাধ্যমে আপনি ঠিকঠাক মতো কাজ সম্পূর্ণ করেছেন কিনা তার ট্র্যাক করা হবে। যেমন: আপনি ইউটিউব ভিডিও সম্পূর্ণ দেখেছেন কিনা তা Allow করার পরই আমরা সনাক্ত করতে পারব। Allow না করলে আমরা যদি শনাক্ত করতে না পারি তাহলে আপনার পেমেন্ট দেয়া হবে না।</p>
-        <button id="allowBtn">Allow</button>
-    </div>
-</div>
-
-<div id="toast"></div>
 </body>
 </html>
