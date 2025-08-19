@@ -1,68 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Register - EasyEarnings</title>
-  <script type="module">
-    // Firebase SDK import (works free via CDN)
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+<meta charset="UTF-8">
+<title>Register - EasyEarnings</title>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-    // ✅ Your Firebase Config (Step 1 values here!)
-    const firebaseConfig = {
+const firebaseConfig = {
   apiKey: "AIzaSyD-mdI3OlZDe9mtpKXyDjclrr1IE0LZJSc",
   authDomain: "view-49d26.firebaseapp.com",
+  databaseURL: "https://view-49d26-default-rtdb.firebaseio.com",
   projectId: "view-49d26",
-  storageBucket: "view-49d26.firebasestorage.app",
+  storageBucket: "view-49d26.appspot.com",
   messagingSenderId: "462642880975",
-  appId: "1:462642880975:web:d2b4b5f5f53a583986f2ba",
-  measurementId: "G-F1H6F6V8MG"
+  appId: "1:462642880975:web:d2b4b5f5f53a583986f2ba"
 };
 
-    // Initialize
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getDatabase(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
 
-    // Register function
-    async function registerUser(event) {
-      event.preventDefault();
+function generateCode(){
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = 'REF';
+  for(let i=0;i<6;i++) code += chars[Math.floor(Math.random()*chars.length)];
+  return code;
+}
 
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      const name = document.getElementById("name").value;
+async function registerUser(event){
+  event.preventDefault();
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
+  const urlParams = new URLSearchParams(window.location.search);
+  const refCode = urlParams.get('ref');
 
-        // Save extra info in Database
-        await set(ref(db, "users/" + user.uid), {
-          name: name,
-          email: email,
-          balance: 0,
-          joined: new Date().toISOString()
-        });
+  try{
+    const userCredential = await createUserWithEmailAndPassword(auth,email,password);
+    const user = userCredential.user;
 
-        alert("✅ Registration successful!");
-        window.location.href = "login.html";
-      } catch (error) {
-        alert("❌ Error: " + error.message);
+    // Generate unique referral code
+    let myCode;
+    for(let i=0;i<5;i++){
+      const code = generateCode();
+      const snapshot = await get(ref(db,'usersByCode/'+code));
+      if(!snapshot.exists()){
+        myCode = code; break;
+      }
+    }
+    if(!myCode) throw new Error("Could not generate referral code");
+
+    // Save user data
+    await set(ref(db,'users/'+user.uid),{
+      name: name,
+      email: email,
+      balance: 0,
+      referralCount: 0,
+      referralCode: myCode,
+      referredBy: refCode || '',
+      createdAt: new Date().toISOString()
+    });
+
+    // Map referral code → userId
+    await set(ref(db,'usersByCode/'+myCode),user.uid);
+
+    // Handle referral
+    if(refCode){
+      await set(ref(db,'referrals/'+refCode+'/'+user.uid),true);
+      const refSnapshot = await get(ref(db,'usersByCode/'+refCode));
+      if(refSnapshot.exists()){
+        const refUserId = refSnapshot.val();
+        const countSnapshot = await get(ref(db,'users/'+refUserId+'/referralCount'));
+        let newCount = (countSnapshot.exists() ? countSnapshot.val() : 0) + 1;
+        await set(ref(db,'users/'+refUserId+'/referralCount'), newCount);
       }
     }
 
-    window.registerUser = registerUser;
-  </script>
+    alert("✅ Registration successful!");
+    window.location.href = "login.html";
+  }catch(e){
+    alert("❌ "+e.message);
+  }
+}
+
+window.registerUser = registerUser;
+</script>
 </head>
 <body>
-  <h2>Register</h2>
-  <form onsubmit="registerUser(event)">
-    <input type="text" id="name" placeholder="Full Name" required><br><br>
-    <input type="email" id="email" placeholder="Email" required><br><br>
-    <input type="password" id="password" placeholder="Password" required><br><br>
-    <button type="submit">Register</button>
-  </form>
-  <p>Already have an account? <a href="login.html">Login</a></p>
+<h2>Register</h2>
+<form onsubmit="registerUser(event)">
+  <input type="text" id="name" placeholder="Full Name" required><br><br>
+  <input type="email" id="email" placeholder="Email" required><br><br>
+  <input type="password" id="password" placeholder="Password" required><br><br>
+  <button type="submit">Register</button>
+</form>
+<p>Already have an account? <a href="login.html">Login</a></p>
 </body>
 </html>
