@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard - EasyEarnings</title>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT.firebaseio.com",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+// Popup
+window.onload = function() {
+  alert("✅ সফলভাবে কাজ শনাক্ত করতে দয়া করে সকল পারমিশন Allow করুন। এর মাধ্যমে আপনি ঠিকঠাক মতো কাজ সম্পূর্ণ করেছেন কিনা তার ট্র্যাক করা হবে। যেমন: আপনি ইউটিউব ভিডিও সম্পূর্ণ দেখেছেন কিনা তা Allow করার পরই আমরা সনাক্ত করতে পারব। Allow না করলে আমরা যদি শনাক্ত করতে না পারি তাহলে আপনার পেমেন্ট দেয়া হবে না।");
+}
+
+// Copy referral
+function copyReferral(){
+  const el = document.getElementById("refLink");
+  el.select(); document.execCommand('copy');
+  alert("Referral link copied!");
+}
+window.copyReferral = copyReferral;
+
+// Logout
+function logout(){
+  signOut(auth).then(()=>window.location.href='login.html');
+}
+window.logout = logout;
+
+// Display user info
+onAuthStateChanged(auth,user=>{
+  if(!user){ window.location.href='login.html'; return; }
+
+  get(child(ref(db), 'users/'+user.uid)).then(snapshot=>{
+    if(snapshot.exists()){
+      const data = snapshot.val();
+      document.getElementById("welcome").innerText = "Hello, "+data.name;
+      document.getElementById("balance").innerText = "Balance: $"+data.balance;
+      const base = window.location.origin;
+      document.getElementById("refLink").value = base+"/register.html?ref="+data.referralCode;
+    }
+  });
+});
+</script>
+</head>
+<body>
+<h1 id="welcome">Welcome</h1>
+<p id="balance">Balance: $0</p>
+<a href="#" onclick="logout()">Logout</a>
+
+<h2>Referral System</h2>
+<input type="text" id="refLink" readonly>
+<button onclick="copyReferral()">Copy Link</button>
+
+<h2>Tasks</h2>
+<div>
+  <button>🎥 Watch YouTube Videos</button>
+  <button>📝 Micro Jobs</button>
+  <button>⭐ Review & Earn</button>
+  <button>📺 Watch Ads & Earn</button>
+</div>
+</body>
+</html>
