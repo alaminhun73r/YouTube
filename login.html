@@ -1,49 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Login - EasyEarnings</title>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+<meta charset="UTF-8">
+<title>Login - EasyEarnings</title>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    const firebaseConfig = {
+const firebaseConfig = {
   apiKey: "AIzaSyD-mdI3OlZDe9mtpKXyDjclrr1IE0LZJSc",
   authDomain: "view-49d26.firebaseapp.com",
   projectId: "view-49d26",
   storageBucket: "view-49d26.firebasestorage.app",
   messagingSenderId: "462642880975",
-  appId: "1:462642880975:web:d2b4b5f5f53a583986f2ba",
-  measurementId: "G-F1H6F6V8MG"
+  appId: "1:462642880975:web:d2b4b5f5f53a583986f2ba"
 };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-    async function loginUser(event) {
-      event.preventDefault();
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+async function loginUser(event){
+  event.preventDefault();
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        alert("✅ Login successful!");
-        window.location.href = "index.php"; // redirect to main page
-      } catch (error) {
-        alert("❌ Error: " + error.message);
-      }
-    }
+  try{
+    await signInWithEmailAndPassword(auth,email,password);
+    alert("✅ Login successful!");
+    window.location.href = "index.html";
+  }catch(e){
+    alert("❌ "+e.message);
+  }
+}
 
-    window.loginUser = loginUser;
-  </script>
+window.loginUser = loginUser;
+</script>
 </head>
 <body>
-  <h2>Login</h2>
-  <form onsubmit="loginUser(event)">
-    <input type="email" id="email" placeholder="Email" required><br><br>
-    <input type="password" id="password" placeholder="Password" required><br><br>
-    <button type="submit">Login</button>
-  </form>
-  <p>Don't have an account? <a href="register.html">Register</a></p>
+<h2>Login</h2>
+<form onsubmit="loginUser(event)">
+  <input type="email" id="email" placeholder="Email" required><br><br>
+  <input type="password" id="password" placeholder="Password" required><br><br>
+  <button type="submit">Login</button>
+</form>
+<p>Don't have an account? <a href="register.html">Register</a></p>
 </body>
 </html>
