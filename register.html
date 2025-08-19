@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register - EasyEarnings</title>
+  <script type="module">
+    // Firebase SDK import (works free via CDN)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    // ✅ Your Firebase Config (Step 1 values here!)
+    const firebaseConfig = {
+  apiKey: "AIzaSyD-mdI3OlZDe9mtpKXyDjclrr1IE0LZJSc",
+  authDomain: "view-49d26.firebaseapp.com",
+  projectId: "view-49d26",
+  storageBucket: "view-49d26.firebasestorage.app",
+  messagingSenderId: "462642880975",
+  appId: "1:462642880975:web:d2b4b5f5f53a583986f2ba",
+  measurementId: "G-F1H6F6V8MG"
+};
+
+    // Initialize
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    // Register function
+    async function registerUser(event) {
+      event.preventDefault();
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const name = document.getElementById("name").value;
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Save extra info in Database
+        await set(ref(db, "users/" + user.uid), {
+          name: name,
+          email: email,
+          balance: 0,
+          joined: new Date().toISOString()
+        });
+
+        alert("✅ Registration successful!");
+        window.location.href = "login.html";
+      } catch (error) {
+        alert("❌ Error: " + error.message);
+      }
+    }
+
+    window.registerUser = registerUser;
+  </script>
+</head>
+<body>
+  <h2>Register</h2>
+  <form onsubmit="registerUser(event)">
+    <input type="text" id="name" placeholder="Full Name" required><br><br>
+    <input type="email" id="email" placeholder="Email" required><br><br>
+    <input type="password" id="password" placeholder="Password" required><br><br>
+    <button type="submit">Register</button>
+  </form>
+  <p>Already have an account? <a href="login.html">Login</a></p>
+</body>
+</html>
