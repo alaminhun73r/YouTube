@@ -9,25 +9,23 @@ import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/fi
 import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT.firebaseio.com",
-  projectId: "YOUR_PROJECT",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyD-mdI3OlZDe9mtpKXyDjclrr1IE0LZJSc",
+  authDomain: "view-49d26.firebaseapp.com",
+  databaseURL: "https://view-49d26-default-rtdb.firebaseio.com",
+  projectId: "view-49d26",
+  storageBucket: "view-49d26.appspot.com",
+  messagingSenderId: "462642880975",
+  appId: "1:462642880975:web:d2b4b5f5f53a583986f2ba"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app);
 
-// Popup
-window.onload = function() {
+window.onload = function(){
   alert("✅ সফলভাবে কাজ শনাক্ত করতে দয়া করে সকল পারমিশন Allow করুন। এর মাধ্যমে আপনি ঠিকঠাক মতো কাজ সম্পূর্ণ করেছেন কিনা তার ট্র্যাক করা হবে। যেমন: আপনি ইউটিউব ভিডিও সম্পূর্ণ দেখেছেন কিনা তা Allow করার পরই আমরা সনাক্ত করতে পারব। Allow না করলে আমরা যদি শনাক্ত করতে না পারি তাহলে আপনার পেমেন্ট দেয়া হবে না।");
 }
 
-// Copy referral
 function copyReferral(){
   const el = document.getElementById("refLink");
   el.select(); document.execCommand('copy');
@@ -35,27 +33,34 @@ function copyReferral(){
 }
 window.copyReferral = copyReferral;
 
-// Logout
 function logout(){
   signOut(auth).then(()=>window.location.href='login.html');
 }
 window.logout = logout;
 
-// Display user info
-onAuthStateChanged(auth,user=>{
+onAuthStateChanged(auth, user=>{
   if(!user){ window.location.href='login.html'; return; }
 
-  get(child(ref(db), 'users/'+user.uid)).then(snapshot=>{
+  get(child(ref(db),'users/'+user.uid)).then(snapshot=>{
     if(snapshot.exists()){
       const data = snapshot.val();
       document.getElementById("welcome").innerText = "Hello, "+data.name;
       document.getElementById("balance").innerText = "Balance: $"+data.balance;
+      document.getElementById("refCount").innerText = "Referrals: "+(data.referralCount || 0);
       const base = window.location.origin;
-      document.getElementById("refLink").value = base+"/register.html?ref="+data.referralCode;
+      document.getElementById("refLink").value = base+"/register.html?ref="+(data.referralCode || '');
     }
   });
 });
 </script>
+
+<style>
+  body { font-family: Arial, sans-serif; padding:20px; background:#f0f4f8; }
+  h1,h2 { color:#0f766e; }
+  input { padding:8px; width:300px; margin:5px 0; }
+  button { padding:8px 12px; background:#0f766e; color:#fff; border:none; cursor:pointer; }
+  .task-blocks button { margin:5px; width:200px; height:50px; font-size:16px; }
+</style>
 </head>
 <body>
 <h1 id="welcome">Welcome</h1>
@@ -65,9 +70,10 @@ onAuthStateChanged(auth,user=>{
 <h2>Referral System</h2>
 <input type="text" id="refLink" readonly>
 <button onclick="copyReferral()">Copy Link</button>
+<p id="refCount">Referrals: 0</p>
 
 <h2>Tasks</h2>
-<div>
+<div class="task-blocks">
   <button>🎥 Watch YouTube Videos</button>
   <button>📝 Micro Jobs</button>
   <button>⭐ Review & Earn</button>
