@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Senior Dating Dashboard</title>
+<link rel="stylesheet" href="style.css">
+<script type="module" src="dashboard.js" defer></script>
+</head>
+<body>
+
+<header>
+    <h1>Welcome to Senior Dating</h1>
+    <button id="logout-btn">Logout</button>
+</header>
+
+<div class="container">
+
+    <!-- Profile Form -->
+    <form id="profile-form">
+        <h2>Update Profile & Interests</h2>
+        <input type="text" id="profile-name" placeholder="Your Name" required>
+        <input type="number" id="profile-age" placeholder="Age" required>
+        <input type="text" id="profile-interests" placeholder="Enter interests, comma separated" required>
+        <button type="submit">Save Profile</button>
+    </form>
+
+    <!-- Matches Section -->
+    <h2>Potential Matches</h2>
+    <div class="matches" id="matches-container">
+        <!-- Matches populate dynamically -->
+    </div>
+
+</div>
+
+<!-- Chat Modal -->
+<div id="chat-modal" class="chat-modal">
+    <div class="chat-header">
+        <span id="chat-with">Chat</span>
+        <span id="close-chat">&times;</span>
+    </div>
+    <div class="chat-body" id="chat-body"></div>
+    <div class="chat-footer">
+        <input type="text" id="chat-message" placeholder="Type message">
+        <button id="send-message">Send</button>
+    </div>
+</div>
+
+</body>
+</html>
