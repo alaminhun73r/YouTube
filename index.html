@@ -3,77 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Senior Dating</title>
+<title>Senior Dating - Login/Register</title>
 <link rel="stylesheet" href="style.css">
-<script src="script.js" defer></script>
+<script type="module" src="script.js" defer></script>
 </head>
 <body>
 
-<header>
+<div class="auth-container">
+
     <h1>Senior Dating</h1>
-    <p>Connect with like-minded adults</p>
-</header>
 
-<div class="container">
-
-    <!-- Slider Section -->
-    <div class="slider">
-        <div class="slides fade">
-            <div class="slide">
-                <img src="https://images.pexels.com/photos/1005642/pexels-photo-1005642.jpeg" alt="Senior Couple 1">
-            </div>
-            <div class="slide">
-                <img src="https://images.pexels.com/photos/5212350/pexels-photo-5212350.jpeg" alt="Senior Couple 2">
-            </div>
-            <div class="slide">
-                <img src="https://images.pexels.com/photos/4252960/pexels-photo-4252960.jpeg" alt="Senior Couple 3">
-            </div>
-            <div class="slide">
-                <img src="https://images.pexels.com/photos/7030170/pexels-photo-7030170.jpeg" alt="Senior Couple 4">
-            </div>
-        </div>
-        <div class="prev" onclick="prevSlide()">&#10094;</div>
-        <div class="next" onclick="nextSlide()">&#10095;</div>
-    </div>
-
-    <!-- Interest Form -->
-    <h2>Find Your Match</h2>
-    <form onsubmit="filterMatches(); return false;">
-        <input type="text" id="interest" placeholder="Enter your interest (e.g., Music, Travel)">
-        <button type="submit">Search Matches</button>
+    <!-- Registration Form -->
+    <form id="register-form">
+        <h2>Register</h2>
+        <input type="text" id="reg-name" placeholder="Full Name" required>
+        <input type="email" id="reg-email" placeholder="Email" required>
+        <input type="password" id="reg-password" placeholder="Password" required>
+        <button type="submit">Register</button>
     </form>
 
-    <!-- Matches Section -->
-    <div class="matches">
-        <div class="match-card" data-interests="Music, Travel, Cooking">
-            <img src="https://images.pexels.com/photos/1005642/pexels-photo-1005642.jpeg" alt="John, 65">
-            <div class="info">
-                <h3>John, 65</h3>
-                <p>Interests: Music, Travel, Cooking</p>
-            </div>
-        </div>
-        <div class="match-card" data-interests="Gardening, Reading, Walking">
-            <img src="https://images.pexels.com/photos/5212350/pexels-photo-5212350.jpeg" alt="Mary, 62">
-            <div class="info">
-                <h3>Mary, 62</h3>
-                <p>Interests: Gardening, Reading, Walking</p>
-            </div>
-        </div>
-        <div class="match-card" data-interests="Travel, Cooking, Yoga">
-            <img src="https://images.pexels.com/photos/4252960/pexels-photo-4252960.jpeg" alt="David, 70">
-            <div class="info">
-                <h3>David, 70</h3>
-                <p>Interests: Travel, Cooking, Yoga</p>
-            </div>
-        </div>
-        <div class="match-card" data-interests="Music, Reading, Painting">
-            <img src="https://images.pexels.com/photos/7030170/pexels-photo-7030170.jpeg" alt="Linda, 67">
-            <div class="info">
-                <h3>Linda, 67</h3>
-                <p>Interests: Music, Reading, Painting</p>
-            </div>
-        </div>
-    </div>
+    <!-- Login Form -->
+    <form id="login-form">
+        <h2>Login</h2>
+        <input type="email" id="login-email" placeholder="Email" required>
+        <input type="password" id="login-password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
 
 </div>
 
